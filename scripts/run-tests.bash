@@ -3,8 +3,11 @@
 echo "Running tests"
 echo "............................"
 
+# This should be run, in order to balance the package.json and package-lock.json
 npm install
 
+
+# cheking which modules have high and critical.
 OUT=$(npm audit --json --registry https://registry.npmjs.org/)
 
 HIGH=$(echo "$OUT" | grep high | tail -1 | awk '{print $2}' | tr -d ,)
@@ -28,3 +31,5 @@ else
   printf "\t\033[32mNo Critical vulnerable\033[0m"
 	echo ""
 fi
+
+
