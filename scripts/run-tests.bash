@@ -32,4 +32,25 @@ else
 	echo ""
 fi
 
+#Git hooks to enforce branch naming policy
+#Branch names in this project must adhere to this contract: (master, development, feature, stage, release, hotfix, bugfix) and use only these latters (A-Za-z0-9._-) create branch name,or else Your commit will be rejected
+echo "Git hooks to enforce branch naming policy checker is running"
 
+local_branch="$(git rev-parse --abbrev-ref HEAD)"
+main_branches_regex="^(development|stage|master|main)$"
+valid_branch_regex="^(bugfix|release|hotfix|feature)\/[A-Za-z0-9._-]+$"
+
+condition=false
+if [[ $local_branch =~ $main_branches_regex ]]; then 
+    printf "\t\033[32mBranch checking is done : valid\033[0m"
+	  echo ""
+    condition=true
+fi
+
+if [[ $condition == false ]]; then
+    if [[ ! $local_branch =~ $valid_branch_regex ]]; then 
+      printf "\t\033[41mBranch names in this project must adhere to this contract: (master, development, feature, stage, release, hotfix, bugfix) and use only these latters (A-Za-z0-9._-) create branch name,or else Your commit will be rejected.try again\033[0m"
+      echo ""
+      exit 1 
+    fi 
+fi
